@@ -1,0 +1,18 @@
+preproc.beeper.enableVideo		=	true
+preproc.beeper.enableAudio		=	true
+preproc.beeper.patterns			=	BUILD SUCCESS;BUILD FAILURE
+preproc.beeper.duration			=	6000
+preproc.beeper.font.size		=	48 
+
+preproc.trimmer.trimmables		= 	[INFO]
+preproc.tabber.indenters		=	Caused by
+preproc.tabber.dedenters		=	
+preproc.tabber.reseters			=	2013-
+
+ui.filters.defaultFilter		=	
+ui.filters.blockFilter.end		=	2013-
+
+ui.console.font.size			=	12
+ui.console.font.name			=	Consolas
+
+reader.tail.oldLines			=	1000
