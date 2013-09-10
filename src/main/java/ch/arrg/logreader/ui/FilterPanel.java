@@ -14,13 +14,12 @@ import javax.swing.JComboBox;
 import javax.swing.JLabel;
 
 import ch.arrg.logreader.core.Config;
-import ch.arrg.logreader.interfaces.ConsumerCallback;
+import ch.arrg.logreader.interfaces.FilterConsumerCallback;
 import ch.arrg.logreader.ui.filterwidget.AbstractFilterWidget;
 import ch.arrg.logreader.ui.filterwidget.FilterField;
 import ch.arrg.logreader.ui.filterwidget.FilterWidgetDecorator;
 import ch.arrg.logreader.ui.interfaces.FilterCallback;
 
-// TODO PERF buffer changes to refilter (do not refilter once per char)
 // TODO BUG 3 there's an increasing amount of whitespace after adding new filters
 public class FilterPanel implements FilterCallback {
 	private Box filterBox;
@@ -28,10 +27,10 @@ public class FilterPanel implements FilterCallback {
 
 	private LinkedList<AbstractFilterWidget> fields = new LinkedList<>();
 
-	private ConsumerCallback callback;
+	private FilterConsumerCallback callback;
 
-	public FilterPanel(ConsumerCallback callback) {
-		this.callback = callback;
+	public FilterPanel(FilterConsumerCallback callback) {
+		this.callback = new CallbackBuffer(callback);
 
 		outerBox = new Box(BoxLayout.Y_AXIS);
 		filterBox = new Box(BoxLayout.Y_AXIS);

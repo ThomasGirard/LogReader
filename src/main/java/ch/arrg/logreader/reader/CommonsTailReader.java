@@ -16,7 +16,7 @@ public class CommonsTailReader implements AbstractReader {
 	// private final int TAIL_N = Config.getIntProp("reader.tail.oldLines");
 	Logger logger = LoggerFactory.getLogger(CommonsTailReader.class);
 
-	// TODO CONF 3 read interval
+	// TODO CONF 3 CommonsTailReader read interval
 	private final int READ_INTERVAL = 10;
 
 	private Tailer tailer;

@@ -2,16 +2,15 @@ package ch.arrg.logreader.core;
 
 import java.io.IOException;
 
-import ch.arrg.logreader.filter.AbstractFilter;
 import ch.arrg.logreader.interfaces.Consumer;
-import ch.arrg.logreader.interfaces.ConsumerCallback;
+import ch.arrg.logreader.interfaces.FilterConsumerCallback;
 import ch.arrg.logreader.reader.AbstractReader;
 
 /**
  * A bridge connects a StreamReader to a Consumer, adding a FilteringConsumer in
  * the middle.
  */
-public class Bridge implements ConsumerCallback {
+public class Bridge {
 
 	private final AbstractReader reader;
 	private final FilteringConsumer filterer;
@@ -34,34 +33,8 @@ public class Bridge implements ConsumerCallback {
 		reader.stop();
 	}
 
-	@Override
-	public void removeFilter(String filterName) {
-		filterer.removeFilter(filterName);
+	public FilterConsumerCallback getCallback() {
+		return filterer;
 	}
 
-	/** {@inheritDoc} */
-	@Override
-	public void addFilter(String filterName, AbstractFilter filter) {
-		filterer.addFilter(filterName, filter);
-	}
-
-	@Override
-	public void updateFilter(String filterName, AbstractFilter filter) {
-		filterer.updateFilter(filterName, filter);
-	}
-
-	@Override
-	public void clearConsole() {
-		filterer.clear();
-	}
-
-	@Override
-	public void refresh() {
-		filterer.refresh();
-	}
-
-	@Override
-	public void setDefaultBehavior(boolean isDisplay) {
-		filterer.setDefaultBehavior(isDisplay);
-	}
 }

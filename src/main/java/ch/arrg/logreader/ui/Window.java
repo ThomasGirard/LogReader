@@ -5,7 +5,6 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Image;
 import java.awt.KeyboardFocusManager;
-import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
 import java.awt.event.WindowAdapter;
@@ -45,7 +44,7 @@ import ch.arrg.logreader.core.Bridge;
 import ch.arrg.logreader.core.Config;
 import ch.arrg.logreader.core.Resources;
 import ch.arrg.logreader.interfaces.AppCallback;
-import ch.arrg.logreader.interfaces.ConsumerCallback;
+import ch.arrg.logreader.interfaces.FilterConsumerCallback;
 import ch.arrg.logreader.interfaces.HasBridges;
 import ch.arrg.logreader.ui.filterwidget.BlockField;
 import ch.arrg.logreader.ui.filterwidget.FilterField;
@@ -56,7 +55,7 @@ public class Window extends JFrame implements HasBridges {
 	private final static Logger logger = LoggerFactory.getLogger(Window.class);
 
 	private LinkedList<String> names = new LinkedList<>();
-	private LinkedList<ConsumerCallback> callbacks = new LinkedList<>();
+	private LinkedList<FilterConsumerCallback> callbacks = new LinkedList<>();
 	private LinkedList<ConsumerTab> tabs = new LinkedList<>();
 	private JTabbedPane tabPanel;
 
@@ -110,7 +109,7 @@ public class Window extends JFrame implements HasBridges {
 		return tabPanel.getSelectedIndex();
 	}
 
-	private ConsumerCallback getCurrentTabCallback() {
+	private FilterConsumerCallback getCurrentTabCallback() {
 		return callbacks.get(tabIndex());
 	}
 
@@ -134,7 +133,7 @@ public class Window extends JFrame implements HasBridges {
 
 		bar.add(makeMainMenu());
 		bar.add(makeTabMenu());
-		bar.add(makeOptionMenu());
+		//bar.add(makeOptionMenu());
 		bar.add(makeFilterMenu());
 
 		this.setJMenuBar(bar);
@@ -198,11 +197,11 @@ public class Window extends JFrame implements HasBridges {
 
 	@Override
 	public void addBridge(String name, Bridge bridge) {
-		ConsumerTab tab = new ConsumerTab(bridge);
+		ConsumerTab tab = new ConsumerTab(bridge.getCallback());
 		bridge.setConsumer(tab);
 
 		names.add(name);
-		callbacks.add(bridge);
+		callbacks.add(bridge.getCallback());
 		tabs.add(tab);
 
 		Component tabContent = tab.asComponent();
@@ -275,16 +274,16 @@ public class Window extends JFrame implements HasBridges {
 		return menu;
 	}
 
-	private JMenu makeOptionMenu() {
-		JMenu menu = new JMenu("Option");
-
-		JMenuItem item;
-
-		item = new JMenuItem(actions.new ToggleScroll());
-		menu.add(item);
-
-		return menu;
-	}
+	//	private JMenu makeOptionMenu() {
+	//		JMenu menu = new JMenu("Option");
+	//
+	//		JMenuItem item;
+	//
+	//		item = new JMenuItem(actions.new ToggleScroll());
+	//		menu.add(item);
+	//
+	//		return menu;
+	//	}
 
 	private JMenu makeTabMenu() {
 		JMenu menu = new JMenu("Tab");
@@ -361,8 +360,8 @@ public class Window extends JFrame implements HasBridges {
 				SwingUtilities.invokeLater(new Runnable() {
 					@Override
 					public void run() {
-						for (ConsumerCallback cb : callbacks) {
-							cb.clearConsole();
+						for (FilterConsumerCallback cb : callbacks) {
+							cb.clear();
 						}
 					}
 				});
@@ -387,7 +386,7 @@ public class Window extends JFrame implements HasBridges {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				Window.this.getCurrentTabCallback().clearConsole();
+				Window.this.getCurrentTabCallback().clear();
 			}
 		}
 
@@ -402,23 +401,6 @@ public class Window extends JFrame implements HasBridges {
 					// TODO BUG 3 can't close last tab
 					String name = names.get(tabIndex());
 					appCallback.removeConsumer(name);
-				}
-			}
-		}
-
-		class ToggleScroll extends MyAction {
-			ToggleScroll() {
-				super("Toggle scrolling", "win-toggle-scrolling", KeyEvent.VK_SCROLL_LOCK, "SCROLL_LOCK");
-			}
-
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				// TODO BUG 1 [GH-2] scroll mode will become inconsistent with the SCROLL_LOCK key if the menu is used
-				Toolkit tk = Toolkit.getDefaultToolkit();
-				boolean scrollLock = tk.getLockingKeyState(KeyEvent.VK_SCROLL_LOCK);
-
-				for (ConsumerTab tab : tabs) {
-					tab.getDisplayPanel().enableScrolling(!scrollLock);
 				}
 			}
 		}

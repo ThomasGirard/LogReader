@@ -3,8 +3,12 @@ package ch.arrg.logreader.core;
 import java.util.LinkedHashMap;
 import java.util.LinkedList;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import ch.arrg.logreader.filter.AbstractFilter;
 import ch.arrg.logreader.interfaces.Consumer;
+import ch.arrg.logreader.interfaces.FilterConsumerCallback;
 
 /**
  * A consumer that also have filters. A call to addLine will only be forwarded
@@ -12,7 +16,9 @@ import ch.arrg.logreader.interfaces.Consumer;
  * 
  * Lines are stored here.
  */
-public class FilteringConsumer implements Consumer {
+public class FilteringConsumer implements Consumer, FilterConsumerCallback {
+	private final static Logger logger = LoggerFactory.getLogger(FilteringConsumer.class);
+
 	private Consumer consumer;
 
 	private PreProcessor preProc = new PreProcessor();
@@ -119,6 +125,7 @@ public class FilteringConsumer implements Consumer {
 	}
 
 	public synchronized void updateFilter(String filterName, AbstractFilter filter) {
+		logger.info("FC.updateFilter");
 		filters.put(filterName, filter);
 		refilter();
 	}
@@ -138,6 +145,7 @@ public class FilteringConsumer implements Consumer {
 	}
 
 	public void refresh() {
+		logger.info("FC.refresh");
 		refilter();
 	}
 }

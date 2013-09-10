@@ -12,6 +12,7 @@ FIXED
 	* Opening files used the file name instead of the file path, so file wouldn't be read most of the time.
 	* In some cases, clearing a console would deadlock the application. Should be ok now.
 BROKEN
+	* Scroll lock menu temporarily disabled (use scroll lock key)
 	* Line numbering is temporarily disabled
 	* Running without -u breaks -n (all previous lines are read, not a set number).
 	

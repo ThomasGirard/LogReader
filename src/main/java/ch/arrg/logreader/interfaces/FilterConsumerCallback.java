@@ -3,11 +3,11 @@ package ch.arrg.logreader.interfaces;
 import ch.arrg.logreader.filter.AbstractFilter;
 
 /**
- * TODO document
+ * Callback to the FilteringConsumer for the UI.
  * */
-public interface ConsumerCallback {
+public interface FilterConsumerCallback {
 
-	public void clearConsole();
+	public void clear();
 
 	/**
 	 * @param filters

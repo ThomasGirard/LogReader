@@ -13,7 +13,7 @@ public class PreProcessor {
 	private List<AbstractPreProcessor> preProcs = new ArrayList<>();
 
 	public PreProcessor() {
-		// TODO CONF 1 preprocs
+		// TODO CONF 2 configure what preprocessors are available ?
 		if (Config.notificationsEnabled()) {
 			preProcs.add(new Beeper());
 		}
