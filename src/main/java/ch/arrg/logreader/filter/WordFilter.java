@@ -16,7 +16,7 @@ package ch.arrg.logreader.filter;
 
 import java.util.HashSet;
 
-// TODO IMPR escape - and + with \
+// TODO IMPR [GH-4] escape - and + with \
 public class WordFilter extends AbstractFilter {
 	private HashSet<String> words = new HashSet<>();
 

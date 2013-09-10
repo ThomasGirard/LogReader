@@ -1,5 +1,6 @@
-2013-??-??	0.5.2
+2013-09-05	0.5.2
 IMPROVED
+	* Running without -u is now much better. It relies on commons-io's Tailer instead of my buggy implementation.
 	* Screen notification are now *FABULOUUUUS*
 	* Performance
 FIXED

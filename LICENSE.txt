@@ -1,0 +1,5 @@
+This application uses librairies from the Apache foundation that is licensed under the Apache License version 2.0
+This license can be read here: http://www.apache.org/licenses/LICENSE-2.0
+
+The code of the application itself is currently under the "I don't know what the f* I'm doing license" 
+which allows you to edit and redistribute the code provided you're not being a dick about it.

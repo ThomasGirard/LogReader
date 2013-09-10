@@ -15,8 +15,9 @@ import ch.arrg.logreader.interfaces.Consumer;
 
 /**
  * This class reads from an inputstream periodically and sends full lines to a
- * Consumer
+ * Consumer.
  * 
+ * Do not use for reading files: CommonsTailReader is better at this.
  */
 public class StreamReader implements AbstractReader {
 	private final static Logger logger = LoggerFactory.getLogger(StreamReader.class);
@@ -70,7 +71,6 @@ public class StreamReader implements AbstractReader {
 		@Override
 		public void run() {
 			try {
-				// TODO BUG 3 reopen file if it closes in StreamReader
 				String line = null;
 				while ((line = reader.readLine()) != null) {
 					consumer.addLine(line + "\n");

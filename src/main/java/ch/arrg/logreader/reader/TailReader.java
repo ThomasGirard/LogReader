@@ -14,6 +14,7 @@ import ch.arrg.logreader.core.Config;
 import ch.arrg.logreader.interfaces.Consumer;
 
 // TODO BUG 1 TailReader doesn't always get killed properly
+/** Spawns a tail -f process. */
 public class TailReader implements AbstractReader {
 	private final int TAIL_N = Config.getIntProp("reader.tail.oldLines");
 

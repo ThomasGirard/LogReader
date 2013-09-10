@@ -10,6 +10,7 @@ public interface AbstractReader {
 
 	public abstract void stop() throws IOException;
 
+	/** Called before start. */
 	public abstract void setConsumer(Consumer cons);
 
 }

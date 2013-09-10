@@ -345,7 +345,7 @@ public class Window extends JFrame implements HasBridges {
 
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				// TODO BUG 1 scroll mode will become inconsistent with the SCROLL_LOCK key if the menu is used
+				// TODO BUG 1 [GH-2] scroll mode will become inconsistent with the SCROLL_LOCK key if the menu is used
 				Toolkit tk = Toolkit.getDefaultToolkit();
 				boolean scrollLock = tk.getLockingKeyState(KeyEvent.VK_SCROLL_LOCK);
 

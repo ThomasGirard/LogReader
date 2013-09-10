@@ -6,6 +6,9 @@ import org.apache.commons.cli.CommandLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+// TODO IMPR javadoc
+// TODO IMPR license
+
 public class Config {
 	private final static Logger logger = LoggerFactory.getLogger(Config.class);
 
@@ -29,7 +32,7 @@ public class Config {
 	}
 
 	public static int getMaxLines() {
-		// TODO BUG 2 bad arguments (especially in -n) will cause problems
+		// TODO BUG 2 bad arguments (especially in -n) will cause problems. Config checking should be fail-on-load not fail-on-use.
 		int max = -1;
 		if (commandLine.hasOption('n')) {
 			String opt = commandLine.getOptionValue('n');

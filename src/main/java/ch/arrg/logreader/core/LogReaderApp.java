@@ -1,6 +1,5 @@
 package ch.arrg.logreader.core;
 
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.HashMap;
@@ -12,6 +11,7 @@ import org.slf4j.LoggerFactory;
 import ch.arrg.logreader.interfaces.AppCallback;
 import ch.arrg.logreader.interfaces.HasBridges;
 import ch.arrg.logreader.reader.AbstractReader;
+import ch.arrg.logreader.reader.CommonsTailReader;
 import ch.arrg.logreader.reader.StreamReader;
 import ch.arrg.logreader.reader.TailReader;
 import ch.arrg.logreader.ui.Window;
@@ -39,13 +39,14 @@ public class LogReaderApp implements AppCallback {
 			TailReader reader = new TailReader(fileName);
 			bridgeReader(name, reader);
 		} else {
-			FileInputStream is = new FileInputStream(fileName);
-			openStream(name, is);
+			CommonsTailReader reader = new CommonsTailReader(fileName);
+			bridgeReader(name, reader);
 		}
 	}
 
 	@Override
 	public void openStream(String name, InputStream is) throws IOException {
+
 		StreamReader reader = new StreamReader(is);
 		bridgeReader(name, reader);
 	}
