@@ -41,8 +41,8 @@ public class FilteringConsumer implements Consumer {
 		String processed = preProc.addLine(s);
 
 		allLines.add(processed);
-		if (accepts(s)) {
-			consumer.addLine(s);
+		if (accepts(processed)) {
+			consumer.addLine(processed);
 		}
 
 		trimBufferSize();

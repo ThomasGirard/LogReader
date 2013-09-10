@@ -63,6 +63,11 @@ public class Config {
 	public static String[] getStringArrayProp(String key) {
 		String joined = getProp(key);
 		String[] split = joined.split(";");
+
+		if (split.length == 1 && split[0].equals("")) {
+			split = new String[0];
+		}
+
 		return split;
 	}
 

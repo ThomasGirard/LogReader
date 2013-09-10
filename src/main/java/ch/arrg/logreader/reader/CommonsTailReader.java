@@ -5,6 +5,8 @@ import java.io.IOException;
 
 import org.apache.commons.io.input.Tailer;
 import org.apache.commons.io.input.TailerListenerAdapter;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ch.arrg.logreader.interfaces.Consumer;
 
@@ -12,6 +14,7 @@ import ch.arrg.logreader.interfaces.Consumer;
 public class CommonsTailReader implements AbstractReader {
 	// TODO BUG CommonsReader does not support -n property.
 	// private final int TAIL_N = Config.getIntProp("reader.tail.oldLines");
+	Logger logger = LoggerFactory.getLogger(CommonsTailReader.class);
 
 	// TODO CONF 3 read interval
 	private final int READ_INTERVAL = 10;
@@ -50,7 +53,11 @@ public class CommonsTailReader implements AbstractReader {
 
 		@Override
 		public void handle(String line) {
-			cons.addLine(line + "\n");
+			try {
+				cons.addLine(line + "\n");
+			} catch (Exception e) {
+				logger.error("Uncaught exception while processing line.", e);
+			}
 		}
 	}
 

@@ -23,20 +23,29 @@ import java.awt.event.KeyEvent;
 import javax.swing.JPanel;
 import javax.swing.JScrollBar;
 import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
+import javax.swing.JTextPane;
+import javax.swing.text.AttributeSet;
+import javax.swing.text.BadLocationException;
+import javax.swing.text.StyledDocument;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ch.arrg.logreader.core.Config;
 import ch.arrg.logreader.interfaces.Consumer;
 import ch.arrg.logreader.ui.logic.MyAction;
 
 class DisplayPanel extends JPanel implements Consumer {
-	JTextArea textArea;
+	Logger logger = LoggerFactory.getLogger(DisplayPanel.class);
+
+	JTextPane textArea;
 	JScrollPane scroll;
+	StyledDocument document;
 
 	public DisplayPanel() {
 		this.setLayout(new BorderLayout());
 
-		textArea = new JTextArea();
+		textArea = new JTextPane();
 		textArea.setEditable(false);
 
 		String fontName = Config.getStringProp("ui.console.font.name");
@@ -44,6 +53,7 @@ class DisplayPanel extends JPanel implements Consumer {
 
 		Font f = new Font(fontName, Font.PLAIN, fontSize);
 		textArea.setFont(f);
+		document = textArea.getStyledDocument();
 
 		// Set default scroll mode (always)
 		enableScrolling(true);
@@ -67,13 +77,19 @@ class DisplayPanel extends JPanel implements Consumer {
 
 	public void clear() {
 		textArea.setText("");
+		document = textArea.getStyledDocument();
 		repaint();
 	}
 
-	public void addLine(String text) {
-		textArea.append(text);
-		scrollDown();
-		repaint();
+	public void addLine(String line) {
+		try {
+			AttributeSet attributes = Styler.makeAttributes(line);
+			document.insertString(document.getLength(), line, attributes);
+			scrollDown();
+			repaint();
+		} catch (BadLocationException e) {
+			logger.error("Failed to insert text in display panel ! ", e);
+		}
 	}
 
 	public void scrollDown() {

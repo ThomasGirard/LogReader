@@ -16,7 +16,7 @@ public abstract class MyAction extends AbstractAction {
 			putValue(MNEMONIC_KEY, mnemonic);
 		}
 
-		if (command != null) {
+		if (accelerator != null) {
 			KeyStroke ks = KeyStroke.getKeyStroke(accelerator);
 			putValue(ACCELERATOR_KEY, ks);
 		}

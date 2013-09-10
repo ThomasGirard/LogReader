@@ -5,7 +5,7 @@ preproc.beeper.duration			=	6000
 preproc.beeper.font.size		=	48 
 
 preproc.trimmer.trimmables		= 	[INFO]
-preproc.tabber.indenters		=	Caused by;Wrapped by
+preproc.tabber.indenters		=	2013-;Caused by;Wrapped by
 preproc.tabber.dedenters		=	
 preproc.tabber.reseters			=	2013-
 
