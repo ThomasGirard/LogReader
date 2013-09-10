@@ -1,11 +1,19 @@
 2013-09-05	0.5.2
+NEW
+	* New "Indent aware filter" to filter exceptions.
 IMPROVED
+	* Opening a file now displays the newly opened tab.
+	* Tab switching using ctrl-tab ctrl-shift-tab.
 	* Running without -u is now much better. It relies on commons-io's Tailer instead of my buggy implementation.
 	* Screen notification are now *FABULOUUUUS*
 	* Performance
+	* Look & Feel is now configurable.
 FIXED
+	* Opening files used the file name instead of the file path, so file wouldn't be read most of the time.
 	* In some cases, clearing a console would deadlock the application. Should be ok now.
-	
+BROKEN
+	* Line numbering is temporarily disabled
+	* Running without -u breaks -n (all previous lines are read, not a set number).
 	
 	
 

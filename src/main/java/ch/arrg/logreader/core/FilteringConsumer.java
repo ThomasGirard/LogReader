@@ -6,9 +6,16 @@ import java.util.LinkedList;
 import ch.arrg.logreader.filter.AbstractFilter;
 import ch.arrg.logreader.interfaces.Consumer;
 
-// TODO FEAT load and store filters
+/**
+ * A consumer that also have filters. A call to addLine will only be forwarded
+ * if the filters match.
+ * 
+ * Lines are stored here.
+ */
 public class FilteringConsumer implements Consumer {
 	private Consumer consumer;
+
+	private PreProcessor preProc = new PreProcessor();
 
 	private LinkedHashMap<String, AbstractFilter> filters = new LinkedHashMap<>();
 
@@ -26,14 +33,15 @@ public class FilteringConsumer implements Consumer {
 	}
 
 	public void setConsumer(Consumer consumer) {
-		this.consumer = new PreProcConsumer(consumer);
-		// this.consumer = new BufferedConsumer(new PreProcConsumer(consumer));
+		this.consumer = consumer;
 	}
 
 	@Override
 	public synchronized void addLine(String s) {
-		allLines.add(s);
-		if (consumer != null && accepts(s)) {
+		String processed = preProc.addLine(s);
+
+		allLines.add(processed);
+		if (accepts(s)) {
 			consumer.addLine(s);
 		}
 
@@ -50,6 +58,7 @@ public class FilteringConsumer implements Consumer {
 	@Override
 	public synchronized void clear() {
 		allLines.clear();
+		preProc.clear();
 
 		if (consumer != null) {
 			consumer.clear();

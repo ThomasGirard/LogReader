@@ -1,2 +1,0 @@
-# Shows how you can override a config property
-preproc.beeper.patterns		=	BUILD SUCCESS;BUILD FAILURE;All initialization tasks completed;OutOfMemory;PermGenSpace

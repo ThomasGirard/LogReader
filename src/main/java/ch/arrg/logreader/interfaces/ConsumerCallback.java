@@ -2,6 +2,9 @@ package ch.arrg.logreader.interfaces;
 
 import ch.arrg.logreader.filter.AbstractFilter;
 
+/**
+ * TODO document
+ * */
 public interface ConsumerCallback {
 
 	public void clearConsole();

@@ -3,20 +3,16 @@ package ch.arrg.logreader.core;
 import java.util.ArrayList;
 import java.util.List;
 
-import ch.arrg.logreader.interfaces.Consumer;
 import ch.arrg.logreader.preprocessor.AbstractPreProcessor;
 import ch.arrg.logreader.preprocessor.Beeper;
-import ch.arrg.logreader.preprocessor.LineNumberer;
 import ch.arrg.logreader.preprocessor.Tabber;
 import ch.arrg.logreader.preprocessor.Trimmer;
 
-public class PreProcConsumer implements Consumer {
+/** A Consumer that modifies all lines that pass through. */
+public class PreProcessor {
 	private List<AbstractPreProcessor> preProcs = new ArrayList<>();
-	private Consumer client;
 
-	public PreProcConsumer(Consumer cons) {
-		this.client = cons;
-
+	public PreProcessor() {
 		// TODO CONF 1 preprocs
 		if (Config.notificationsEnabled()) {
 			preProcs.add(new Beeper());
@@ -24,24 +20,20 @@ public class PreProcConsumer implements Consumer {
 
 		preProcs.add(new Trimmer());
 		preProcs.add(new Tabber());
-		preProcs.add(new LineNumberer());
+		// preProcs.add(new LineNumberer());
 	}
 
-	@Override
-	public synchronized void addLine(String s) {
+	public synchronized String addLine(String s) {
 		for (AbstractPreProcessor pre : preProcs) {
 			s = pre.process(s);
 		}
 
-		client.addLine(s);
+		return s;
 	}
 
-	@Override
 	public void clear() {
 		for (AbstractPreProcessor pre : preProcs) {
 			pre.reset();
 		}
-
-		client.clear();
 	}
 }

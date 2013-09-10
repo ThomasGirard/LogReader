@@ -17,6 +17,7 @@ public class Trimmer implements AbstractPreProcessor {
 				return line.substring(toTrim.length());
 			}
 		}
+
 		return line;
 	}
 

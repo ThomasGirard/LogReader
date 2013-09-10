@@ -14,18 +14,17 @@
  */
 package ch.arrg.logreader.filter;
 
+/** Unused */
 public class LineNumberFilter extends AbstractFilter {
 	private int start = 0;
 	private int stop = Integer.MAX_VALUE;
 
-	/** {@inheritDoc} */
 	@Override
 	public void reset() {
 		start = 0;
 		stop = Integer.MAX_VALUE;
 	}
 
-	/** {@inheritDoc} */
 	@Override
 	public boolean accepts(String line) {
 		int firstTab = line.indexOf('\t');

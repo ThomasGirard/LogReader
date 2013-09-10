@@ -6,9 +6,7 @@ import org.apache.commons.cli.CommandLine;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-// TODO IMPR javadoc
-// TODO IMPR license
-
+/** Static class for accessing configuration options. */
 public class Config {
 	private final static Logger logger = LoggerFactory.getLogger(Config.class);
 
@@ -77,6 +75,10 @@ public class Config {
 		}
 	}
 
+	/**
+	 * Gets a value from the properties file and trims white-space on both ends
+	 * before returning it.
+	 */
 	private static String getPropTrim(String key) {
 		return getProp(key).trim();
 	}

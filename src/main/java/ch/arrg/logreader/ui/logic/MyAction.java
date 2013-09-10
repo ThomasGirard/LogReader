@@ -1,4 +1,4 @@
-package ch.arrg.logreader.ui;
+package ch.arrg.logreader.ui.logic;
 
 import javax.swing.AbstractAction;
 import javax.swing.JComponent;

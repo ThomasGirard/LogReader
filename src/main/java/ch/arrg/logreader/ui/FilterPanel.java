@@ -22,7 +22,6 @@ import ch.arrg.logreader.ui.interfaces.FilterCallback;
 
 // TODO PERF buffer changes to refilter (do not refilter once per char)
 // TODO BUG 3 there's an increasing amount of whitespace after adding new filters
-
 public class FilterPanel implements FilterCallback {
 	private Box filterBox;
 	private Box outerBox;

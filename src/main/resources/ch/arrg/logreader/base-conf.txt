@@ -5,9 +5,11 @@ preproc.beeper.duration			=	6000
 preproc.beeper.font.size		=	48 
 
 preproc.trimmer.trimmables		= 	[INFO]
-preproc.tabber.indenters		=	Caused by
+preproc.tabber.indenters		=	Caused by;Wrapped by
 preproc.tabber.dedenters		=	
 preproc.tabber.reseters			=	2013-
+
+ui.lookAndFeel					=	CROSS
 
 ui.filters.defaultFilter		=	
 ui.filters.blockFilter.end		=	2013-

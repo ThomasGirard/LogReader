@@ -1,7 +1,10 @@
 package ch.arrg.logreader.ui;
 
+import java.awt.AWTKeyStroke;
+import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.Image;
+import java.awt.KeyboardFocusManager;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
@@ -10,11 +13,17 @@ import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.LinkedList;
+import java.util.List;
+import java.util.Set;
 
 import javax.imageio.ImageIO;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
+import javax.swing.InputMap;
+import javax.swing.JComponent;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JMenu;
@@ -22,7 +31,10 @@ import javax.swing.JMenuBar;
 import javax.swing.JMenuItem;
 import javax.swing.JOptionPane;
 import javax.swing.JTabbedPane;
+import javax.swing.KeyStroke;
 import javax.swing.SwingUtilities;
+import javax.swing.UIManager;
+import javax.swing.UIManager.LookAndFeelInfo;
 import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 
@@ -30,12 +42,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import ch.arrg.logreader.core.Bridge;
+import ch.arrg.logreader.core.Config;
 import ch.arrg.logreader.core.Resources;
 import ch.arrg.logreader.interfaces.AppCallback;
 import ch.arrg.logreader.interfaces.ConsumerCallback;
 import ch.arrg.logreader.interfaces.HasBridges;
 import ch.arrg.logreader.ui.filterwidget.BlockField;
 import ch.arrg.logreader.ui.filterwidget.FilterField;
+import ch.arrg.logreader.ui.filterwidget.TabAwareField;
+import ch.arrg.logreader.ui.logic.MyAction;
 
 public class Window extends JFrame implements HasBridges {
 	private final static Logger logger = LoggerFactory.getLogger(Window.class);
@@ -52,10 +67,37 @@ public class Window extends JFrame implements HasBridges {
 	public Window(AppCallback callback) {
 		this.appCallback = callback;
 
+		setLookAndFeel();
+
 		makeMenu();
 		makeComponents();
 		setProperties();
 		setListeners();
+		setupTabTraversalKeys(tabPanel);
+	}
+
+	private void setLookAndFeel() {
+		String lookAndFeelName = Config.getStringProp("ui.lookAndFeel");
+		if (lookAndFeelName != null) {
+			try {
+				if (lookAndFeelName.equals("SYSTEM")) {
+					lookAndFeelName = UIManager.getSystemLookAndFeelClassName();
+				} else if (lookAndFeelName.equals("CROSS")) {
+					lookAndFeelName = UIManager.getCrossPlatformLookAndFeelClassName();
+				}
+
+				UIManager.setLookAndFeel(lookAndFeelName);
+			} catch (Exception e) {
+				// handle exception
+				logger.warn("Unable to set desired L&F ({}), falling back to default.", lookAndFeelName);
+
+				List<String> names = new ArrayList<>();
+				for (LookAndFeelInfo v : UIManager.getInstalledLookAndFeels()) {
+					names.add(v.getClassName());
+				}
+				logger.info("Supported look and feels: {}", names);
+			}
+		}
 	}
 
 	@Override
@@ -74,10 +116,6 @@ public class Window extends JFrame implements HasBridges {
 
 	private FilterPanel getCurrentFilterPanel() {
 		return tabs.get(tabIndex()).getFilterPanel();
-	}
-
-	private ConsumerTab getCurrentConsumerTab() {
-		return tabs.get(tabIndex());
 	}
 
 	private void makeComponents() {
@@ -139,6 +177,7 @@ public class Window extends JFrame implements HasBridges {
 				Window.this.setTitle(name);
 			}
 		});
+
 	}
 
 	private void openFileDialog() {
@@ -147,9 +186,10 @@ public class Window extends JFrame implements HasBridges {
 		if (code == JFileChooser.APPROVE_OPTION) {
 			File selected = chooser.getSelectedFile();
 			String fName = selected.getName();
+			String fPath = selected.getPath();
 
 			try {
-				appCallback.openFile(fName, fName);
+				appCallback.openFile(fName, fPath);
 			} catch (IOException e) {
 				JOptionPane.showMessageDialog(this, "Could not open file.", "Error", JOptionPane.ERROR_MESSAGE);
 			}
@@ -165,7 +205,9 @@ public class Window extends JFrame implements HasBridges {
 		callbacks.add(bridge);
 		tabs.add(tab);
 
-		tabPanel.addTab(name, tab.asComponent());
+		Component tabContent = tab.asComponent();
+		tabPanel.addTab(name, tabContent);
+		tabPanel.setSelectedComponent(tabContent);
 
 		remakeHotKeys();
 	}
@@ -192,6 +234,31 @@ public class Window extends JFrame implements HasBridges {
 		for (int i = 0; i < maxKeys; i++) {
 			tabPanel.setMnemonicAt(i, KeyEvent.VK_1 + i);
 		}
+	}
+
+	private static void setupTabTraversalKeys(JTabbedPane tabbedPane) {
+		// Taken from 
+		// http://www.davidc.net/programming/java/how-make-ctrl-tab-switch-tabs-jtabbedpane
+
+		KeyStroke ctrlTab = KeyStroke.getKeyStroke("ctrl TAB");
+		KeyStroke ctrlShiftTab = KeyStroke.getKeyStroke("ctrl shift TAB");
+
+		// Remove ctrl-tab from normal focus traversal
+		Set<AWTKeyStroke> forwardKeys = new HashSet<AWTKeyStroke>(
+				tabbedPane.getFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS));
+		forwardKeys.remove(ctrlTab);
+		tabbedPane.setFocusTraversalKeys(KeyboardFocusManager.FORWARD_TRAVERSAL_KEYS, forwardKeys);
+
+		// Remove ctrl-shift-tab from normal focus traversal
+		Set<AWTKeyStroke> backwardKeys = new HashSet<AWTKeyStroke>(
+				tabbedPane.getFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS));
+		backwardKeys.remove(ctrlShiftTab);
+		tabbedPane.setFocusTraversalKeys(KeyboardFocusManager.BACKWARD_TRAVERSAL_KEYS, backwardKeys);
+
+		// Add keys to the tab's input map
+		InputMap inputMap = tabbedPane.getInputMap(JComponent.WHEN_ANCESTOR_OF_FOCUSED_COMPONENT);
+		inputMap.put(ctrlTab, "navigateNext");
+		inputMap.put(ctrlShiftTab, "navigatePrevious");
 	}
 
 	private JMenu makeMainMenu() {
@@ -244,12 +311,14 @@ public class Window extends JFrame implements HasBridges {
 		item = new JMenuItem(actions.new NewBlockFilter());
 		menu.add(item);
 
+		item = new JMenuItem(actions.new NewTabAwareFilter());
+		menu.add(item);
+
 		return menu;
 	}
 
 	private class Actions {
 		class NewBlockFilter extends MyAction {
-
 			NewBlockFilter() {
 				super("New block filter", "filter-new-block", 0, null);
 			}
@@ -258,11 +327,20 @@ public class Window extends JFrame implements HasBridges {
 			public void actionPerformed(ActionEvent e) {
 				getCurrentFilterPanel().addFilter(new BlockField());
 			}
+		}
 
+		class NewTabAwareFilter extends MyAction {
+			NewTabAwareFilter() {
+				super("New tab aware filter", "filter-new-tab-aware", 0, null);
+			}
+
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				getCurrentFilterPanel().addFilter(new TabAwareField());
+			}
 		}
 
 		class NewBasicFilter extends MyAction {
-
 			NewBasicFilter() {
 				super("New Basic Filter", "filter-new-basic", 0, null);
 			}
@@ -271,11 +349,9 @@ public class Window extends JFrame implements HasBridges {
 			public void actionPerformed(ActionEvent e) {
 				getCurrentFilterPanel().addFilter(new FilterField());
 			}
-
 		}
 
 		class ClearAllTabs extends MyAction {
-
 			ClearAllTabs() {
 				super("Clear all", "file-clear-all", 'd', "control shift D");
 			}
@@ -291,11 +367,9 @@ public class Window extends JFrame implements HasBridges {
 					}
 				});
 			}
-
 		}
 
 		class OpenFile extends MyAction {
-
 			OpenFile() {
 				super("Open file", "file-open", KeyEvent.VK_O, "control O");
 			}
@@ -304,11 +378,9 @@ public class Window extends JFrame implements HasBridges {
 			public void actionPerformed(ActionEvent e) {
 				openFileDialog();
 			}
-
 		}
 
 		class ClearTab extends MyAction {
-
 			ClearTab() {
 				super("Clear", "tab-clear", KeyEvent.VK_D, "control D");
 			}
@@ -317,11 +389,9 @@ public class Window extends JFrame implements HasBridges {
 			public void actionPerformed(ActionEvent e) {
 				Window.this.getCurrentTabCallback().clearConsole();
 			}
-
 		}
 
 		class CloseTab extends MyAction {
-
 			CloseTab() {
 				super("Close", "tab-close", KeyEvent.VK_W, "control W");
 			}
@@ -334,11 +404,9 @@ public class Window extends JFrame implements HasBridges {
 					appCallback.removeConsumer(name);
 				}
 			}
-
 		}
 
 		class ToggleScroll extends MyAction {
-
 			ToggleScroll() {
 				super("Toggle scrolling", "win-toggle-scrolling", KeyEvent.VK_SCROLL_LOCK, "SCROLL_LOCK");
 			}
@@ -353,8 +421,8 @@ public class Window extends JFrame implements HasBridges {
 					tab.getDisplayPanel().enableScrolling(!scrollLock);
 				}
 			}
-
 		}
-
+		// End of Actions
 	}
+
 }

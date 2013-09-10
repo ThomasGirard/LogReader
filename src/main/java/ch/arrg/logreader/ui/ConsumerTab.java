@@ -10,6 +10,7 @@ import javax.swing.JLabel;
 import ch.arrg.logreader.interfaces.Consumer;
 import ch.arrg.logreader.interfaces.ConsumerCallback;
 
+// TODO IMPR 1 ctrl-tab shift-ctrl-tab
 public class ConsumerTab implements Consumer {
 	// private final static Logger logger = LoggerFactory.getLogger(ConsumerTab.class);
 
@@ -17,7 +18,6 @@ public class ConsumerTab implements Consumer {
 	private FilterPanel filterPanel;
 
 	private final ConsumerCallback callback;
-	private boolean pauseReading = false;
 
 	private Box box;
 
@@ -48,14 +48,12 @@ public class ConsumerTab implements Consumer {
 	 */
 	@Override
 	public void addLine(String s) {
-		if (!pauseReading) {
-			displayPanel.appendText(s);
-		}
+		displayPanel.addLine(s);
 	}
 
 	@Override
 	public void clear() {
-		displayPanel.setText("");
+		displayPanel.clear();
 	}
 
 	public static void addFilterLabel(Box b, String text) {

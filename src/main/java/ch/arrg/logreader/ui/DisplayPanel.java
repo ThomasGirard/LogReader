@@ -26,8 +26,10 @@ import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import ch.arrg.logreader.core.Config;
+import ch.arrg.logreader.interfaces.Consumer;
+import ch.arrg.logreader.ui.logic.MyAction;
 
-class DisplayPanel extends JPanel {
+class DisplayPanel extends JPanel implements Consumer {
 	JTextArea textArea;
 	JScrollPane scroll;
 
@@ -63,12 +65,12 @@ class DisplayPanel extends JPanel {
 		// caret.setUpdatePolicy(policy);
 	}
 
-	public void setText(String text) {
-		textArea.setText(text);
+	public void clear() {
+		textArea.setText("");
 		repaint();
 	}
 
-	public void appendText(String text) {
+	public void addLine(String text) {
 		textArea.append(text);
 		scrollDown();
 		repaint();

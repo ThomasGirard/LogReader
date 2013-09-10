@@ -32,6 +32,8 @@ public class LogReaderApp implements AppCallback {
 		bridgeHandler.start();
 	}
 
+	// TODO BUG 1 opening file at runtime doesn't work
+
 	/** {@inheritDoc} */
 	@Override
 	public void openFile(String name, String fileName) throws IOException {

@@ -1,0 +1,11 @@
+This is a file
+It is used for a test case
+Where we have an Exception
+at some point and we tab it
+at such that it looks like a stack trace
+Caused by another error
+at some part of the app
+at la la la la 
+But it ends here
+And we should see the text above
+??? No

@@ -13,8 +13,8 @@ import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 
 import ch.arrg.logreader.filter.AbstractFilter;
-import ch.arrg.logreader.ui.UiHelpers;
 import ch.arrg.logreader.ui.interfaces.FilterCallback;
+import ch.arrg.logreader.ui.logic.UiHelpers;
 
 // TODO FEAT make filters orderable
 

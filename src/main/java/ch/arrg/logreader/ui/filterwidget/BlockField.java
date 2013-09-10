@@ -9,8 +9,8 @@ import javax.swing.JTextField;
 import ch.arrg.logreader.core.Config;
 import ch.arrg.logreader.filter.BlockFilter;
 import ch.arrg.logreader.filter.WordFilter;
-import ch.arrg.logreader.ui.UiHelpers;
 import ch.arrg.logreader.ui.interfaces.FilterCallback;
+import ch.arrg.logreader.ui.logic.UiHelpers;
 
 public class BlockField extends AbstractFilterWidget {
 	private final static String DEFAULT_TO = Config.getStringProp("ui.filters.blockFilter.end");
