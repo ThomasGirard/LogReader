@@ -1,25 +1,17 @@
-LogReader is a GUI application for viewing and filtering text files. It works kind of like an interactive fusion between tail and grep. 
+LogReader is a GUI application for viewing and filtering text files. 
+It works kind of like an interactive fusion between tail and grep. 
 
 ## Basic Installation 
 
-Installation is simple, but depends on whether you have **tail** on your path or not.
+Installation is simple:
 
-Copy the Logreader jar wherever you want.
+1. Copy the Logreader jar wherever you want.
+2. javaw -jar path/to/logreader.jar -f file1.txt file2.log
 
-#### With tail
-    
-    javaw -jar path/to/logreader.jar -u -f file1.txt file2.log
+## Better installation for CLI
+It's recommended to create an alias like this : 
 
-#### Without tail
-
-LogReader can be used without tail, but files won't be dynamically re-read for changes. This will be fixed later.
-
-The command is the same as above but without the -u flag. 
-
-## Better installation
-It's recommended to create an alias like this (again, remove the -u flag if you don't have tail): 
-
-    alias readlogs='javaw -jar path/to/logreader.jar -u -f'
+    alias readlogs='javaw -jar path/to/logreader.jar -f'
 
 You can now do 
 			readlog someFile.txt someOtherFile.log &
