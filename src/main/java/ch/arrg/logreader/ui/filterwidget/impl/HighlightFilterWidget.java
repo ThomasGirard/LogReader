@@ -1,4 +1,4 @@
-package ch.arrg.logreader.ui.filterwidget;
+package ch.arrg.logreader.ui.filterwidget.impl;
 
 import java.awt.Component;
 
@@ -7,20 +7,24 @@ import javax.swing.BoxLayout;
 import javax.swing.JTextField;
 
 import ch.arrg.logreader.filter.WordFilter;
+import ch.arrg.logreader.ui.filterwidget.AbstractFilterWidget;
+import ch.arrg.logreader.ui.filterwidget.UIOnlyWidget;
 import ch.arrg.logreader.ui.interfaces.FilterCallback;
 import ch.arrg.logreader.ui.logic.UiHelpers;
 
-public class FilterField extends AbstractFilterWidget {
+// TODO Highlight widget: there's currently now way to callback from this
+
+public class HighlightFilterWidget extends AbstractFilterWidget implements UIOnlyWidget {
 
 	private JTextField textField;
 	private Box box;
 
-	public FilterField() {
+	public HighlightFilterWidget() {
 		super();
 
 		box = new Box(BoxLayout.LINE_AXIS);
 
-		UiHelpers.addFilterLabel(box, "Match all of:");
+		UiHelpers.addFilterLabel(box, "Highlight: ");
 
 		textField = new JTextField();
 		box.add(textField);
@@ -33,7 +37,7 @@ public class FilterField extends AbstractFilterWidget {
 
 	@Override
 	public WordFilter asFilter() {
-		return FilterField.convertTextField(textField);
+		return null;
 	}
 
 	public static WordFilter convertTextField(JTextField field) {
@@ -64,4 +68,5 @@ public class FilterField extends AbstractFilterWidget {
 	public void setText(String text) {
 		textField.setText(text);
 	}
+
 }

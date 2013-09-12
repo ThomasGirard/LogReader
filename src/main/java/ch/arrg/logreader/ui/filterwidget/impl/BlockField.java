@@ -1,4 +1,4 @@
-package ch.arrg.logreader.ui.filterwidget;
+package ch.arrg.logreader.ui.filterwidget.impl;
 
 import java.awt.Component;
 
@@ -9,6 +9,7 @@ import javax.swing.JTextField;
 import ch.arrg.logreader.core.Config;
 import ch.arrg.logreader.filter.BlockFilter;
 import ch.arrg.logreader.filter.WordFilter;
+import ch.arrg.logreader.ui.filterwidget.AbstractFilterWidget;
 import ch.arrg.logreader.ui.interfaces.FilterCallback;
 import ch.arrg.logreader.ui.logic.UiHelpers;
 

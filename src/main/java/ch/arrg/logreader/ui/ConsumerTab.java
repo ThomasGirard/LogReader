@@ -5,6 +5,8 @@ import java.awt.Component;
 import java.awt.Toolkit;
 import java.awt.event.ActionEvent;
 import java.awt.event.KeyEvent;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 import javax.swing.Box;
 import javax.swing.BoxLayout;
@@ -27,6 +29,8 @@ public class ConsumerTab implements Consumer {
 
 	private Box box;
 
+	private boolean isScrolling = false;
+
 	public ConsumerTab(FilterConsumerCallback callback) {
 		this.callback = callback;
 
@@ -47,6 +51,19 @@ public class ConsumerTab implements Consumer {
 
 		displayPanel = new DisplayPanel();
 		scrollPanel = new JScrollPane(displayPanel.getComponent());
+
+		scrollPanel.getVerticalScrollBar().addMouseListener(new MouseAdapter() {
+			@Override
+			public void mousePressed(MouseEvent e) {
+				isScrolling = true;
+			}
+
+			@Override
+			public void mouseReleased(MouseEvent e) {
+				isScrolling = false;
+			}
+		});
+
 		// TODO LOW seems a bit hackish: we have to do this because otherwise scrolling is very slow in panel.
 		scrollPanel.getVerticalScrollBar().setUnitIncrement(18);
 		box.add(scrollPanel);
@@ -87,6 +104,11 @@ public class ConsumerTab implements Consumer {
 	public void scrollDown() {
 		if (!scrollPanel.isValid()) {
 			// Needed because otherwise the app will refilter too early on startup
+			return;
+		}
+
+		// Don't scroll when the user is currently holding the scroll bar.
+		if (isScrolling) {
 			return;
 		}
 

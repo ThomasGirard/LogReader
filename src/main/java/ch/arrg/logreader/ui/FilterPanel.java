@@ -11,28 +11,36 @@ import java.util.LinkedList;
 import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JComboBox;
+import javax.swing.JComponent;
 import javax.swing.JLabel;
+
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import ch.arrg.logreader.core.Config;
 import ch.arrg.logreader.interfaces.FilterConsumerCallback;
 import ch.arrg.logreader.ui.filterwidget.AbstractFilterWidget;
-import ch.arrg.logreader.ui.filterwidget.FilterField;
 import ch.arrg.logreader.ui.filterwidget.FilterWidgetDecorator;
+import ch.arrg.logreader.ui.filterwidget.impl.FilterField;
 import ch.arrg.logreader.ui.interfaces.FilterCallback;
 
 // TODO BUG 3 there's an increasing amount of whitespace after adding new filters
 public class FilterPanel implements FilterCallback {
+	private final static Logger logger = LoggerFactory.getLogger(FilterPanel.class);
+
 	private Box filterBox;
-	private Box outerBox;
+	private JComponent component;
 
 	private LinkedList<AbstractFilterWidget> fields = new LinkedList<>();
 
 	private FilterConsumerCallback callback;
 
 	public FilterPanel(FilterConsumerCallback callback) {
-		this.callback = new CallbackBuffer(callback);
+		this.callback = new FilterDebounce(callback);
 
-		outerBox = new Box(BoxLayout.Y_AXIS);
+		Box outerBox = new Box(BoxLayout.Y_AXIS);
+		this.component = outerBox;
+
 		filterBox = new Box(BoxLayout.Y_AXIS);
 
 		outerBox.add(filterBox);
@@ -64,7 +72,7 @@ public class FilterPanel implements FilterCallback {
 		defaultBehavior.setMaximumSize(defaultBehavior.getPreferredSize());
 		inner.add(defaultBehavior);
 
-		outerBox.add(inner);
+		component.add(inner);
 	}
 
 	private enum DefaultBehavior {
@@ -105,11 +113,73 @@ public class FilterPanel implements FilterCallback {
 		callback.updateFilter(field.getFilterName(), field.asFilter());
 	}
 
+	@Override
+	public void moveUp(AbstractFilterWidget widget) {
+		if (fields.size() < 2) {
+			return;
+		}
+
+		// Find the index of the widget, and the index of the previous one
+		int idxDown = fields.indexOf(widget);
+		int idxUp = idxDown - 1;
+
+		// Can't move up when at the top
+		if (idxDown == 0) {
+			return;
+		}
+
+		swapFilters(idxDown, idxUp);
+	}
+
+	@Override
+	public void moveDown(AbstractFilterWidget widget) {
+		// Find the index of the widget
+		int idxUp = fields.indexOf(widget);
+
+		// moveDown is the same as moving the next filter up
+		if (idxUp + 1 < fields.size()) {
+			AbstractFilterWidget next = fields.get(idxUp + 1);
+			moveUp(next);
+		}
+	}
+
+	private void swapFilters(int idxLow, int idxHigh) {
+		if (idxHigh == idxLow) {
+			return;
+		} else if (idxHigh < idxLow) {
+			swapFilters(idxHigh, idxLow);
+			return;
+		}
+
+		assert idxHigh > idxLow;
+
+		// Swap fields
+		AbstractFilterWidget wLow = fields.get(idxLow);
+		AbstractFilterWidget wHigh = fields.get(idxHigh);
+
+		fields.set(idxLow, wHigh);
+		fields.set(idxHigh, wLow);
+
+		// Swap decorators
+		Component deco1 = filterBox.getComponent(idxLow);
+		Component deco2 = filterBox.getComponent(idxHigh);
+
+		filterBox.remove(deco1);
+		filterBox.remove(deco2);
+		filterBox.add(deco2, idxLow);
+		filterBox.add(deco1, idxHigh);
+
+		filterBox.validate();
+
+		// Swap filters in logic
+		callback.swapFilters(wLow.getFilterName(), wHigh.getFilterName());
+	}
+
 	/**
 	 * @return
 	 */
 	public Component getBox() {
-		return outerBox;
+		return component;
 	}
 
 	public void removeFilter(AbstractFilterWidget f) {
@@ -146,7 +216,7 @@ public class FilterPanel implements FilterCallback {
 		filterBox.add(deco.asComponent());
 		Container top = filterBox.getTopLevelAncestor();
 		if (top != null) {
-			outerBox.getTopLevelAncestor().validate();
+			component.getTopLevelAncestor().validate();
 		}
 		deco.takeFocus();
 

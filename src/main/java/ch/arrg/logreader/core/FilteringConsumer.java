@@ -1,7 +1,8 @@
 package ch.arrg.logreader.core;
 
-import java.util.LinkedHashMap;
+import java.util.ArrayList;
 import java.util.LinkedList;
+import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +24,8 @@ public class FilteringConsumer implements Consumer, FilterConsumerCallback {
 
 	private PreProcessor preProc = new PreProcessor();
 
-	private LinkedHashMap<String, AbstractFilter> filters = new LinkedHashMap<>();
+	private List<String> filterNames = new ArrayList<>();
+	private List<AbstractFilter> filters = new ArrayList<>();
 
 	private LinkedList<String> allLines = new LinkedList<>();
 
@@ -78,7 +80,7 @@ public class FilteringConsumer implements Consumer, FilterConsumerCallback {
 	private boolean accepts(String line) {
 		boolean hasAccepting = false;
 
-		for (AbstractFilter f : filters.values()) {
+		for (AbstractFilter f : filters) {
 			if (!f.isEnabled()) {
 				continue;
 			}
@@ -120,12 +122,15 @@ public class FilteringConsumer implements Consumer, FilterConsumerCallback {
 	}
 
 	public synchronized void addFilter(String filterName, AbstractFilter filter) {
-		filters.put(filterName, filter);
+		filterNames.add(filterName);
+		filters.add(filter);
 		refilter();
 	}
 
 	public synchronized void updateFilter(String filterName, AbstractFilter filter) {
-		filters.put(filterName, filter);
+		int idx = filterNames.indexOf(filterName);
+		filters.set(idx, filter);
+
 		refilter();
 	}
 
@@ -144,7 +149,20 @@ public class FilteringConsumer implements Consumer, FilterConsumerCallback {
 	}
 
 	public void refresh() {
-		logger.info("FC.refresh");
+		refilter();
+	}
+
+	@Override
+	public void swapFilters(String filterName1, String filterName2) {
+		int idx1 = filterNames.indexOf(filterName1);
+		int idx2 = filterNames.indexOf(filterName2);
+
+		AbstractFilter f1 = filters.get(idx1);
+		AbstractFilter f2 = filters.get(idx2);
+
+		filters.set(idx1, f2);
+		filters.set(idx2, f1);
+
 		refilter();
 	}
 }

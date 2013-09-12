@@ -46,9 +46,9 @@ import ch.arrg.logreader.core.Resources;
 import ch.arrg.logreader.interfaces.AppCallback;
 import ch.arrg.logreader.interfaces.FilterConsumerCallback;
 import ch.arrg.logreader.interfaces.HasBridges;
-import ch.arrg.logreader.ui.filterwidget.BlockField;
-import ch.arrg.logreader.ui.filterwidget.FilterField;
-import ch.arrg.logreader.ui.filterwidget.TabAwareField;
+import ch.arrg.logreader.ui.filterwidget.impl.BlockField;
+import ch.arrg.logreader.ui.filterwidget.impl.FilterField;
+import ch.arrg.logreader.ui.filterwidget.impl.TabAwareField;
 import ch.arrg.logreader.ui.logic.MyAction;
 
 public class Window extends JFrame implements HasBridges {

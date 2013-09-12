@@ -25,4 +25,6 @@ public interface FilterConsumerCallback {
 	void updateFilter(String filterName, AbstractFilter filter);
 
 	public void setDefaultBehavior(boolean isDisplay);
+
+	public void swapFilters(String filterName1, String filterName2);
 }

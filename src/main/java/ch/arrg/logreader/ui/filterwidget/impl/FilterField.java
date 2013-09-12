@@ -1,4 +1,4 @@
-package ch.arrg.logreader.ui.filterwidget;
+package ch.arrg.logreader.ui.filterwidget.impl;
 
 import java.awt.Component;
 
@@ -6,27 +6,25 @@ import javax.swing.Box;
 import javax.swing.BoxLayout;
 import javax.swing.JTextField;
 
-import ch.arrg.logreader.filter.TabAwareFilter;
 import ch.arrg.logreader.filter.WordFilter;
+import ch.arrg.logreader.ui.filterwidget.AbstractFilterWidget;
 import ch.arrg.logreader.ui.interfaces.FilterCallback;
 import ch.arrg.logreader.ui.logic.UiHelpers;
 
-public class TabAwareField extends AbstractFilterWidget {
+public class FilterField extends AbstractFilterWidget {
 
 	private JTextField textField;
 	private Box box;
 
-	public TabAwareField() {
+	public FilterField() {
 		super();
 
 		box = new Box(BoxLayout.LINE_AXIS);
 
-		UiHelpers.addFilterLabel(box, "Reject from:");
+		UiHelpers.addFilterLabel(box, "Match all of:");
 
 		textField = new JTextField();
 		box.add(textField);
-
-		UiHelpers.addFilterLabel(box, "including following tabbed lines.");
 	}
 
 	@Override
@@ -35,9 +33,22 @@ public class TabAwareField extends AbstractFilterWidget {
 	}
 
 	@Override
-	public TabAwareFilter asFilter() {
-		WordFilter inner = FilterField.convertTextField(textField);
-		TabAwareFilter filter = new TabAwareFilter(inner);
+	public WordFilter asFilter() {
+		return FilterField.convertTextField(textField);
+	}
+
+	public static WordFilter convertTextField(JTextField field) {
+		String text = field.getText();
+
+		WordFilter filter = new WordFilter();
+
+		String[] whiteList = text.split("\\s+");
+		for (String word : whiteList) {
+			if (word.trim().length() > 0) {
+				filter.addWord(word);
+			}
+		}
+
 		return filter;
 	}
 
