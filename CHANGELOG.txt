@@ -1,6 +1,7 @@
 2013-09-05	0.5.2
 NEW
 	* New "Indent aware filter" to filter exceptions.
+	* Colored logs ! Weeee !!
 IMPROVED
 	* Opening a file now displays the newly opened tab.
 	* Tab switching using ctrl-tab ctrl-shift-tab.

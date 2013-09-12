@@ -17,7 +17,7 @@ You can now do
 			readlog someFile.txt someOtherFile.log &
 
 ## Further info
-MANUAL.txt
+MANUAL.md
 	Explains how things work.
     
 Use the --help flag to see available options.

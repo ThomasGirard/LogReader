@@ -47,11 +47,12 @@ public class ConsumerTab implements Consumer {
 
 		displayPanel = new DisplayPanel();
 		scrollPanel = new JScrollPane(displayPanel.getComponent());
+		// TODO LOW seems a bit hackish: we have to do this because otherwise scrolling is very slow in panel.
+		scrollPanel.getVerticalScrollBar().setUnitIncrement(18);
 		box.add(scrollPanel);
 
-		// TODO IMPR scroll to bottom when END is pressed
-		// ScrollDown action = new ScrollDown();
-		// action.addToComponent(this);
+		ScrollDown action = new ScrollDown();
+		action.addToComponent(box);
 	}
 
 	/**
@@ -106,6 +107,7 @@ public class ConsumerTab implements Consumer {
 
 		@Override
 		public void actionPerformed(ActionEvent e) {
+			System.out.println("Scroll down ?");
 			scrollDown();
 		}
 	}

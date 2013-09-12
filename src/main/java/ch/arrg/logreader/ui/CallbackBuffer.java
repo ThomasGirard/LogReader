@@ -59,7 +59,6 @@ public class CallbackBuffer implements FilterConsumerCallback {
 
 	@Override
 	public void refresh() {
-		logger.info("BC.refresh");
 
 		Runnable r = new Runnable() {
 			public void run() {
@@ -72,7 +71,6 @@ public class CallbackBuffer implements FilterConsumerCallback {
 
 	@Override
 	public void updateFilter(final String filterName, final AbstractFilter filter) {
-		logger.info("BC.updateFilter");
 
 		Runnable r = new Runnable() {
 			public void run() {

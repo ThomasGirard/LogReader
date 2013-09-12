@@ -14,9 +14,11 @@
  */
 package ch.arrg.logreader.ui;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.Font;
 
+import javax.swing.JPanel;
 import javax.swing.JTextPane;
 import javax.swing.text.AttributeSet;
 import javax.swing.text.BadLocationException;
@@ -31,10 +33,16 @@ import ch.arrg.logreader.interfaces.Consumer;
 class DisplayPanel implements Consumer {
 	private Logger logger = LoggerFactory.getLogger(DisplayPanel.class);
 
+	/** We use a JPanel container as a fix for JTextPane's line wrapping issue. */
+	private JPanel container;
+
 	private JTextPane textArea;
 	private StyledDocument document;
 
 	public DisplayPanel() {
+		container = new JPanel();
+		container.setLayout(new BorderLayout());
+
 		textArea = new JTextPane();
 		textArea.setEditable(false);
 
@@ -46,6 +54,8 @@ class DisplayPanel implements Consumer {
 
 		// Retrieve document
 		document = textArea.getStyledDocument();
+
+		container.add(textArea);
 	}
 
 	public void clear() {
@@ -65,6 +75,6 @@ class DisplayPanel implements Consumer {
 	}
 
 	public Component getComponent() {
-		return textArea;
+		return container;
 	}
 }

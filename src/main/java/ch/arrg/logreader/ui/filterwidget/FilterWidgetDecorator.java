@@ -44,7 +44,7 @@ public class FilterWidgetDecorator extends AbstractFilterWidget {
 		addSelect();
 	}
 
-	enum SelectEnum {
+	private enum SelectEnum {
 		PRINT_ON_ACCEPT("print matching lines"), DISCARD_ON_REJECT("discard rejected lines");
 
 		private final String name;
@@ -129,7 +129,7 @@ public class FilterWidgetDecorator extends AbstractFilterWidget {
 		return widget.getFilterName();
 	}
 
-	class DecoratorCallback implements FilterCallback {
+	private class DecoratorCallback implements FilterCallback {
 		@Override
 		public void updateFilter(AbstractFilterWidget widget) {
 			rebuild();

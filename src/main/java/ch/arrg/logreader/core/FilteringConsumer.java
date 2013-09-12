@@ -125,7 +125,6 @@ public class FilteringConsumer implements Consumer, FilterConsumerCallback {
 	}
 
 	public synchronized void updateFilter(String filterName, AbstractFilter filter) {
-		logger.info("FC.updateFilter");
 		filters.put(filterName, filter);
 		refilter();
 	}
