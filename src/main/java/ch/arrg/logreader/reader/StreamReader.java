@@ -22,7 +22,6 @@ import ch.arrg.logreader.interfaces.Consumer;
 public class StreamReader implements AbstractReader {
 	private final static Logger logger = LoggerFactory.getLogger(StreamReader.class);
 
-	// TODO CONF 3 StreamReader read interval
 	private final static int READ_INTERVAL_MS = 10;
 
 	private ReadTask task;
@@ -81,7 +80,7 @@ public class StreamReader implements AbstractReader {
 		}
 
 		public void stop() {
-			// TODO BUG 3 close StreamReader on quit
+			// TODO BUG 3 close StreamReader on quit (?)
 			// scanner.close();
 		}
 	}

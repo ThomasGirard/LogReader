@@ -398,7 +398,7 @@ public class Window extends JFrame implements HasBridges {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				if (names.size() > 1) {
-					// TODO BUG 3 can't close last tab
+					// TODO IMPR - make it possible to close last tab
 					String name = names.get(tabIndex());
 					appCallback.removeConsumer(name);
 				}

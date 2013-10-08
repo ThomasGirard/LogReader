@@ -19,12 +19,8 @@ import ch.arrg.logreader.core.Config;
 import ch.arrg.logreader.core.LogReaderApp;
 import ch.arrg.logreader.core.Resources;
 
-// TODO FEAT highlight occurences
-// TODO FEAT [GH-3] collapsible exceptions
-// TODO FEAT load and restore session (open files + filters)
-// TODO IMPR javadoc
-// TODO IMPR license
-// TODO BUG 2 with -n, old lines are removed only on refilter()
+// TODO FEAT + [GH-3] collapsible exceptions
+// TODO FEAT = load and restore session (open files + filters)
 
 /**
  * This class is the entry point of LogReader.

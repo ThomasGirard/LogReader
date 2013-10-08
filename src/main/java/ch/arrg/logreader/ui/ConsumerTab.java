@@ -64,7 +64,6 @@ public class ConsumerTab implements Consumer {
 			}
 		});
 
-		// TODO LOW seems a bit hackish: we have to do this because otherwise scrolling is very slow in panel.
 		scrollPanel.getVerticalScrollBar().setUnitIncrement(18);
 		box.add(scrollPanel);
 
@@ -100,7 +99,7 @@ public class ConsumerTab implements Consumer {
 		return displayPanel;
 	}
 
-	// TODO IMPR make scroll locking work with menu
+	// TODO IMPR = make scroll locking work with menu
 	public void scrollDown() {
 		if (!scrollPanel.isValid()) {
 			// Needed because otherwise the app will refilter too early on startup

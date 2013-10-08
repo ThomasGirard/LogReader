@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import ch.arrg.logreader.interfaces.Consumer;
 
+// TODO CONF 3 Readers read interval
+
 public interface AbstractReader {
 
 	public abstract void start();

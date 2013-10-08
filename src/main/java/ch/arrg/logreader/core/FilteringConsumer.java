@@ -56,6 +56,7 @@ public class FilteringConsumer implements Consumer, FilterConsumerCallback {
 		trimBufferSize();
 	}
 
+	// TODO BUG 2 with -n, old lines are removed only on refilter()
 	private void trimBufferSize() {
 		int maxLines = Config.getMaxLines();
 		if (maxLines != -1 && allLines.size() > maxLines) {

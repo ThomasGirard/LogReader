@@ -19,7 +19,6 @@ public class TailReader implements AbstractReader {
 
 	private final static Logger logger = LoggerFactory.getLogger(TailReader.class);
 
-	// TODO CONF 3 TailReader read interval
 	private final static int READ_INTERVAL_MS = 10;
 	private final static int READ_PAUSE_MS = 0;
 

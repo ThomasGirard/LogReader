@@ -1,3 +1,7 @@
+2013-09-15 0.5.3
+NEW
+	* Filters can now be reordered
+
 2013-09-05	0.5.2
 NEW
 	* New "Indent aware filter" to filter exceptions.
@@ -17,25 +21,13 @@ BROKEN
 	* Line numbering is temporarily disabled
 	* Running without -u breaks -n (all previous lines are read, not a set number).
 	
-	
-
 2013-04-10	0.5.1
 NEW
 	* With --notifications, get notified when a web service has started or a maven build has finished.
 	* With -n <int>, keep at most <int> lines of log in the window. 
 	* Many properties can now be configured in a conf.txt file (see manual).
-
 IMPROVED
 	* Menus improved
 	* Keyboard support improved
-
 FIXED
 	* Auto-scrolling
-
-KNOWN BUGS
-	* Last tab can't be closed
-	* Possible concurrency problems when loading a large log file. Avoid modifying a tab that is loading log data.
-	* Some input stream may not be properly closed when quitting.
-	* When adding filters, the space between the [display] dropdown and the console increases
-	* When using -n, old lines only get cleared when the console is refiltered
-	* Problems when using -n with a non integer argument. 

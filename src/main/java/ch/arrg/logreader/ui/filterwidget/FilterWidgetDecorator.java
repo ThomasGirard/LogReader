@@ -20,8 +20,6 @@ import ch.arrg.logreader.filter.AbstractFilter;
 import ch.arrg.logreader.ui.interfaces.FilterCallback;
 import ch.arrg.logreader.ui.logic.UiHelpers;
 
-// TODO FEAT make filters orderable
-
 public class FilterWidgetDecorator extends AbstractFilterWidget {
 
 	private final AbstractFilterWidget widget;

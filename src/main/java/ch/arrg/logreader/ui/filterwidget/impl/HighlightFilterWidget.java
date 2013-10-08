@@ -12,7 +12,7 @@ import ch.arrg.logreader.ui.filterwidget.UIOnlyWidget;
 import ch.arrg.logreader.ui.interfaces.FilterCallback;
 import ch.arrg.logreader.ui.logic.UiHelpers;
 
-// TODO Highlight widget: there's currently now way to callback from this
+// TODO FEAT Highlight widget: there's currently now way to callback from this
 
 public class HighlightFilterWidget extends AbstractFilterWidget implements UIOnlyWidget {
 
